@@ -46,6 +46,16 @@ cd "$SRC_DIR"
 git pull
 cd "$CWD"
 
+if ! [ -d "$NEXTCLOUD_PATH" ] ; then
+	echo "ERROR: nextcloud path not found: $NEXTCLOUD_PATH"
+	exit 1
+fi
+
+if ! [ -d "$NEXTCLOUD_DATA" ] ; then
+	echo "ERROR: nextcloud data path not found: $NEXTCLOUD_DATA"
+	exit 1
+fi
+
 mkdir -p "$BACKUP_PATH"
 "${BIN_DIR}/calcardbackup" "$NEXTCLOUD_PATH" -o "$BACKUP_PATH" -p -ltm 30 -r 180 -d '-%Y-%m-%d-%T'
 nextcloud.occ deck:export oac > "$DECK_BACKUP_PATH" # just keep one copy of the deck info, and just oac (for now)
