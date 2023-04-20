@@ -3,7 +3,7 @@
 # requires `calcardbackup` from https://codeberg.org/BernieO/calcardbackup
 # assumes nextcloud is installed as a snap, with my user as oac
 
-SRC_DIR="/usr/local/src/calcardbackup"
+SRC_DIR="/usr/local/src"
 BIN_DIR="/usr/local/bin"
 NEXTCLOUD_PATH="/var/snap/nextcloud/current/nextcloud"
 NEXTCLOUD_DATA="/var/snap/nextcloud/common/nextcloud/data"
@@ -11,7 +11,7 @@ BACKUP_DIR="/oac/files/Documents/Backups/CalCardDav/"
 BACKUP_PATH="${NEXTCLOUD_DATA}${BACKUP_DIR}"
 DECK_BACKUP_PATH="${BACKUP_PATH}oac-deck.json"
 
-if [ $(whoami) != "root" ] ; then
+if [ "$(whoami)" != "root" ] ; then
 	echo "ERROR: must be run as root"
 	exit 1
 fi
@@ -21,16 +21,16 @@ if ! command -v git ; then
 	exit 1
 fi
 
-if ! command -v calcardbackup ; then
-	mkdir -p /usr/local/src
-	git clone https://codeberg.org/BernieO/calcardbackup.git "$SRC_DIR"
-	ln -s "${SRC_DIR}/calcardbackup" "${BIN_DIR}/calcardbackup"
+if ! [ -x "${BIN_DIR}/calcardbackup" ] ; then
+	mkdir -p "$SRC_DIR"
+	git clone https://codeberg.org/BernieO/calcardbackup.git "${SRC_DIR}/calcardbackup"
+	rm "${BIN_DIR}/calcardbackup"
+	ln -s "${SRC_DIR}/calcardbackup/calcardbackup" "${BIN_DIR}/calcardbackup"
 fi
 
 # if that didn't work, for whatever reason
-if ! command -v calcardbackup ; then
-	echo "ERROR: missing command 'calcardbackup'"
-	echo "Please make sure it is in the path for the root user"
+if ! [ -x "${BIN_DIR}/calcardbackup" ] ; then
+	echo "ERROR: missing executable '${BIN_DIR}/calcardbackup'"
 	echo "The repository can be cloned from: https://codeberg.org/BernieO/calcardbackup"
 	exit 1
 fi
@@ -42,7 +42,7 @@ if ! command -v nextcloud.occ ; then
 fi
 
 CWD="$(pwd)"
-cd "$SRC_DIR"
+cd "${SRC_DIR}/calcardbackup"
 git pull
 cd "$CWD"
 
