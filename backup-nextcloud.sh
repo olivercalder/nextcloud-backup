@@ -24,7 +24,7 @@ fi
 if ! command -v calcardbackup ; then
 	mkdir -p /usr/local/src
 	git clone https://codeberg.org/BernieO/calcardbackup.git "$SRC_DIR"
-	ln -s /usr/local/src/calcardbackup/calcardbackup "${BIN_DIR}/calcardbackup"
+	ln -s "${SRC_DIR}/calcardbackup" "${BIN_DIR}/calcardbackup"
 fi
 
 # if that didn't work, for whatever reason
