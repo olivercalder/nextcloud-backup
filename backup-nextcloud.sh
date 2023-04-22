@@ -11,6 +11,8 @@ BACKUP_DIR="/oac/files/Documents/Backups/CalCardDav/"
 BACKUP_PATH="${NEXTCLOUD_DATA}${BACKUP_DIR}"
 DECK_BACKUP_PATH="${BACKUP_PATH}oac-deck.json"
 
+export PATH="/snap/bin:$PATH"
+
 if [ "$(whoami)" != "root" ] ; then
 	echo "ERROR: must be run as root"
 	exit 1
@@ -57,7 +59,7 @@ if ! [ -d "$NEXTCLOUD_DATA" ] ; then
 fi
 
 mkdir -p "$BACKUP_PATH"
-"${BIN_DIR}/calcardbackup" "$NEXTCLOUD_PATH" -o "$BACKUP_PATH" -p -ltm 30 -r 180 -d '-%Y-%m-%d-%T'
+sudo PATH="$PATH" "${BIN_DIR}/calcardbackup" "$NEXTCLOUD_PATH" -o "$BACKUP_PATH" -p -ltm 30 -r 180 -d '-%Y-%m-%d-%T'
 nextcloud.occ deck:export oac > "$DECK_BACKUP_PATH" # just keep one copy of the deck info, and just oac (for now)
 nextcloud.occ files:scan --path="$BACKUP_DIR"
 
