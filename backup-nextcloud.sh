@@ -26,7 +26,7 @@ fi
 if ! [ -x "${BIN_DIR}/calcardbackup" ] ; then
 	mkdir -p "$SRC_DIR"
 	git clone https://codeberg.org/BernieO/calcardbackup.git "${SRC_DIR}/calcardbackup"
-	rm "${BIN_DIR}/calcardbackup"
+	rm -f "${BIN_DIR}/calcardbackup"
 	ln -s "${SRC_DIR}/calcardbackup/calcardbackup" "${BIN_DIR}/calcardbackup"
 fi
 
